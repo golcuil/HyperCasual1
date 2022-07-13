@@ -23,4 +23,14 @@ public class SubCharController : MonoBehaviour
     {
         navMesh.SetDestination(_target.position);
     }
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("niddle"))
+        {
+            SpawnManager.spawnManager.ActiveCharacters--;
+            this.gameObject.SetActive(false);
+        }
+    }
 }

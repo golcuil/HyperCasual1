@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - SpawnManager
+  - niddle
+  - Sum
+  - Subtract
+  - Multiply
+  - Divide
   layers:
   - Default
   - TransparentFX
