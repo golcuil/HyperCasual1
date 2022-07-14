@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mathematical;
 
 public class SpawnManager : MonoBehaviour
 {
     [SerializeField] GameObject destinationPoint;
-    //[SerializeField] GameObject spawnPoint;
-    [SerializeField] GameObject prefabChar;
     [SerializeField] List<GameObject> poolChars;
     [SerializeField] int activeCharacters = 1;
+    [SerializeField] List<GameObject> spawnParticles;
+    [SerializeField] List<GameObject> destroyParticles;
 
     public GameObject DestinationPoint { get => destinationPoint; private set { destinationPoint = value; } }
     public int ActiveCharacters { get => activeCharacters ; set { activeCharacters = value; } }
@@ -19,13 +20,10 @@ public class SpawnManager : MonoBehaviour
     {
         spawnManager = this;
     }
-    // Update is called once per frame
+
     void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.A))
-        //{
-            
-        //}
+
     }
 
 
@@ -35,157 +33,56 @@ public class SpawnManager : MonoBehaviour
         {
             case "Multiply":
 
-                int num1 = 0;
-                int loopMultiply = activeCharacters * (value-1);
-                foreach (var item in poolChars)
-                {
-                    if(num1 < loopMultiply)
-                    {
-                        if (!item.activeInHierarchy)
-                        {
-                            item.transform.position = objectPos.position;
-                            item.SetActive(true);
-                            num1++;
-
-                        }
-                    }
-                    else
-                    {
-                        num1 = 0;
-                        break;
-                    }
-                   
-                }
-                activeCharacters *= value;
+                MathematicalOperations.Multiply(poolChars, objectPos, value);
                 break;
 
             case "Sum":
 
-                int num2 = 0;
-
-                foreach (var item in poolChars)
-                {
-                    if (num2 < value)
-                    {
-                        if (!item.activeInHierarchy)
-                        {
-                            item.transform.position = objectPos.position;
-                            item.SetActive(true);
-                            num2++;
-
-                        }
-                    }
-                    else
-                    {
-                        num2 = 0;
-                        break;
-                    }
-
-                }
-                activeCharacters += value;
+                MathematicalOperations.Sum(poolChars, objectPos, value);
                 break;
 
             case "Subtract":
 
-                if(activeCharacters <= value)
-                {
-                    foreach(var item in poolChars)
-                    {
-                        if (item.activeInHierarchy)
-                        {
-                            item.transform.position = Vector3.zero;
-                            item.SetActive(false);
-                        }
-                        
-                    }
-
-                    activeCharacters = 1;
-                }
-
-                else
-                {
-                    int num3 = 0;
-
-                    foreach(var item in poolChars)
-                    {
-                        if(num3 != value)
-                        {
-                            if (item.activeInHierarchy)
-                            {
-                                item.transform.position = Vector3.zero;
-                                item.SetActive(false);
-                                num3++;
-                            }
-                            
-                        }
-
-                        else
-                        {
-                            num3 = 0;
-                            break;
-                        }
-                    }
-
-                    activeCharacters -= value;
-                }
-
-                
+                MathematicalOperations.Subtract(poolChars, value);
                 break;
 
             case "Divide":
 
-                int divided = activeCharacters / value;
-
-                if (activeCharacters <= value)
-                {
-                    foreach (var item in poolChars)
-                    {
-                        if (item.activeInHierarchy)
-                        {
-                            item.transform.position = Vector3.zero;
-                            item.SetActive(false);
-                        }
-                        
-                    }
-
-                    activeCharacters = 1;
-                }
-                else
-                {
-                    int num4 = 0;
-                    if (activeCharacters % value == 0)
-                    {
-                        activeCharacters = divided;
-                    }
-                    else
-                    {
-                        activeCharacters = divided + (activeCharacters % value);
-                    }
-
-                    foreach (var item in poolChars)
-                    {
-                        if(num4 != activeCharacters)
-                        {
-                            if (item.activeInHierarchy)
-                            {
-                                item.transform.position = Vector3.zero;
-                                item.SetActive(false);
-                                num4++;
-                            }
-                            
-                        }
-                        else
-                        {
-                            num4 = 0;
-                            break;
-                        }
-
-                    }
-
-                    
-                }
-
+                MathematicalOperations.Divided(poolChars, value);
                 break;
+        }
+    }
+
+
+    public void DestroyEffect(GameObject item)
+    {
+        foreach (var effect in destroyParticles)
+        {
+            if (!effect.activeInHierarchy)
+            {
+                Vector3 effectPos = new Vector3(item.transform.position.x, 0.23f, item.transform.position.z + 1f);
+
+                effect.SetActive(true);
+                effect.transform.position = effectPos;
+                effect.GetComponent<ParticleSystem>().Play();
+                break;
+            }
+        }
+    }
+
+    public void SpawningParticles(GameObject item)
+    {
+        foreach (var effect in spawnParticles)
+        {
+            if (!effect.activeInHierarchy)
+            {
+                Vector3 effectPos = new Vector3(item.transform.position.x, 0.23f, item.transform.position.z + 1f);
+
+                effect.SetActive(true);
+                effect.transform.position = effectPos;
+                effect.GetComponent<ParticleSystem>().Play();
+                break;
+            }
         }
     }
 }

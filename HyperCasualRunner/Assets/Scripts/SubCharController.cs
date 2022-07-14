@@ -29,6 +29,7 @@ public class SubCharController : MonoBehaviour
     {
         if (other.CompareTag("niddle"))
         {
+            SpawnManager.spawnManager.DestroyEffect(gameObject);
             SpawnManager.spawnManager.ActiveCharacters--;
             this.gameObject.SetActive(false);
         }
