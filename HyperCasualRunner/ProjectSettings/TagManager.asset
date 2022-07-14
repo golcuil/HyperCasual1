@@ -10,6 +10,10 @@ TagManager:
   - Subtract
   - Multiply
   - Divide
+  - SawNiddle
+  - SubChars
+  - WindNiddle
+  - Wind Area
   layers:
   - Default
   - TransparentFX

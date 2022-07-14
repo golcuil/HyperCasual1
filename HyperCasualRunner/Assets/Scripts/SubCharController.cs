@@ -33,5 +33,19 @@ public class SubCharController : MonoBehaviour
             SpawnManager.spawnManager.ActiveCharacters--;
             this.gameObject.SetActive(false);
         }
+
+        if (other.CompareTag("SawNiddle"))
+        {
+            SpawnManager.spawnManager.DestroyEffect(gameObject);
+            SpawnManager.spawnManager.ActiveCharacters--;
+            this.gameObject.SetActive(false);
+        }
+
+        if (other.CompareTag("WindNiddle"))
+        {
+            SpawnManager.spawnManager.DestroyEffect(gameObject);
+            SpawnManager.spawnManager.ActiveCharacters--;
+            this.gameObject.SetActive(false);
+        }
     }
 }
