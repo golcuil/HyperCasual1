@@ -29,23 +29,30 @@ public class SubCharController : MonoBehaviour
     {
         if (other.CompareTag("niddle"))
         {
-            SpawnManager.spawnManager.DestroyEffect(gameObject);
-            SpawnManager.spawnManager.ActiveCharacters--;
-            this.gameObject.SetActive(false);
+            DestroyingSequence(gameObject);
         }
 
         if (other.CompareTag("SawNiddle"))
         {
-            SpawnManager.spawnManager.DestroyEffect(gameObject);
-            SpawnManager.spawnManager.ActiveCharacters--;
-            this.gameObject.SetActive(false);
+            DestroyingSequence(gameObject);
         }
 
         if (other.CompareTag("WindNiddle"))
         {
-            SpawnManager.spawnManager.DestroyEffect(gameObject);
-            SpawnManager.spawnManager.ActiveCharacters--;
-            this.gameObject.SetActive(false);
+            DestroyingSequence(gameObject);
         }
+
+        if (other.CompareTag("Hammer"))
+        {
+            DestroyingSequence(gameObject);
+            SpawnManager.spawnManager.HammerDestroyShow(other.gameObject.transform);
+        }
+    }
+
+    public void DestroyingSequence(GameObject gameObject)
+    {
+        SpawnManager.spawnManager.DestroyEffect(gameObject);
+        SpawnManager.spawnManager.ActiveCharacters--;
+        gameObject.SetActive(false);
     }
 }

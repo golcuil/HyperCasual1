@@ -14,6 +14,9 @@ TagManager:
   - SubChars
   - WindNiddle
   - Wind Area
+  - Hammer
+  - BattleFieldEnter
+  - Enemy
   layers:
   - Default
   - TransparentFX

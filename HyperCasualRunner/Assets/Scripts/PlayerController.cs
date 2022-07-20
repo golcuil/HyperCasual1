@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float slideSpeed = 0.75f;
     [SerializeField] float lerpSpeed = 0.3f;
     [SerializeField] SpawnManager spawnManager;
+    [SerializeField] GameObject battlePosition;
 
     // Update is called once per frame
     void FixedUpdate()
@@ -17,7 +18,15 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        PlayerMove();
+        if (!spawnManager.IsBattleStart)
+        {
+            PlayerMove();
+        }
+        else
+        {
+            transform.position = Vector3.Lerp(transform.position, battlePosition.transform.position, 0.05f);
+        }
+        
     }
 
     void PlayerMove()
@@ -44,6 +53,11 @@ public class PlayerController : MonoBehaviour
         {
             int value = int.Parse(other.gameObject.name);
             spawnManager.NumericOperations(other.tag,other.gameObject.transform,value);
+        }
+
+        if (other.CompareTag("BattleFieldEnter"))
+        {      
+            spawnManager.IsBattleStart = true;
         }
     }
 }

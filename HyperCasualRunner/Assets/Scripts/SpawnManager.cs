@@ -7,18 +7,31 @@ public class SpawnManager : MonoBehaviour
 {
     [SerializeField] GameObject destinationPoint;
     [SerializeField] List<GameObject> poolChars;
-    [SerializeField] int activeCharacters = 1;
     [SerializeField] List<GameObject> spawnParticles;
     [SerializeField] List<GameObject> destroyParticles;
+    [SerializeField] GameObject hammerDestroyEffect;
+    [SerializeField] List<GameObject> enemyPoolChars;
+    [SerializeField] int activeCharacters = 1;
+    [SerializeField] int numberOfEnemies = 1;
+
+    bool _isBattleStart = false;
+    public bool IsBattleStart { get => _isBattleStart; set { _isBattleStart = value; } }
+
 
     public GameObject DestinationPoint { get => destinationPoint; private set { destinationPoint = value; } }
     public int ActiveCharacters { get => activeCharacters ; set { activeCharacters = value; } }
 
+    //Singleton
     public static SpawnManager spawnManager;
 
     private void Awake()
     {
         spawnManager = this;
+    }
+
+    private void Start()
+    {
+        SpawnEnemies();
     }
 
     void Update()
@@ -82,6 +95,33 @@ public class SpawnManager : MonoBehaviour
                 effect.transform.position = effectPos;
                 effect.GetComponent<ParticleSystem>().Play();
                 break;
+            }
+        }
+    }
+
+    public void HammerDestroyShow(Transform pos)
+    {
+        Vector3 spotPos = new Vector3(0, 0.2f, pos.position.z);
+
+        hammerDestroyEffect.SetActive(true);
+        hammerDestroyEffect.transform.position = spotPos;
+        StartCoroutine(SpotDeActivate());
+    }
+
+
+    IEnumerator SpotDeActivate()
+    {
+        yield return new WaitForSeconds(2f);
+        hammerDestroyEffect.SetActive(false);
+    }
+
+    void SpawnEnemies()
+    {
+        for (int i = 0; i < numberOfEnemies; i++)
+        {
+            if (!enemyPoolChars[i].activeInHierarchy)
+            {
+                enemyPoolChars[i].SetActive(true);
             }
         }
     }
