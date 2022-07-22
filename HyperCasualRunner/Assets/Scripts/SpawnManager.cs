@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Mathematical;
+using GeneralLibrary;
 
 public class SpawnManager : MonoBehaviour
 {
@@ -13,6 +13,10 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] List<GameObject> enemyPoolChars;
     [SerializeField] int activeCharacters = 1;
     [SerializeField] int numberOfEnemies = 1;
+    MathematicalOperations _mathematicalOperations = new MathematicalOperations();
+    MemoryManagement _memoryManagement = new MemoryManagement();
+
+    public int NumberOfEnemies { get; set; }
 
     bool _isBattleStart = false;
     public bool IsBattleStart { get => _isBattleStart; set { _isBattleStart = value; } }
@@ -31,12 +35,14 @@ public class SpawnManager : MonoBehaviour
 
     private void Start()
     {
+        _memoryManagement.SaveData("Ad", "Ahmet");
+        //_memoryManagement.SaveData("Point", 500);
+        _memoryManagement.SaveData("Deneme", 1.5f);
+
+        Debug.Log(_memoryManagement.ReadDataFloat("Deneme"));
+        Debug.Log(_memoryManagement.ReadDataInt("Point"));
+        Debug.Log(_memoryManagement.ReadDataStr("Ad"));
         SpawnEnemies();
-    }
-
-    void Update()
-    {
-
     }
 
 
@@ -46,22 +52,22 @@ public class SpawnManager : MonoBehaviour
         {
             case "Multiply":
 
-                MathematicalOperations.Multiply(poolChars, objectPos, value);
+                _mathematicalOperations.Multiply(poolChars, objectPos, value);
                 break;
 
             case "Sum":
 
-                MathematicalOperations.Sum(poolChars, objectPos, value);
+                _mathematicalOperations.Sum(poolChars, objectPos, value);
                 break;
 
             case "Subtract":
 
-                MathematicalOperations.Subtract(poolChars, value);
+                _mathematicalOperations.Subtract(poolChars, value);
                 break;
 
             case "Divide":
 
-                MathematicalOperations.Divided(poolChars, value);
+                _mathematicalOperations.Divided(poolChars, value);
                 break;
         }
     }
@@ -78,6 +84,7 @@ public class SpawnManager : MonoBehaviour
                 effect.SetActive(true);
                 effect.transform.position = effectPos;
                 effect.GetComponent<ParticleSystem>().Play();
+                effect.GetComponent<AudioSource>().Play();
                 break;
             }
         }
@@ -124,5 +131,50 @@ public class SpawnManager : MonoBehaviour
                 enemyPoolChars[i].SetActive(true);
             }
         }
+    }
+
+
+    public IEnumerator EndOfGame()
+    {
+        int result = activeCharacters - numberOfEnemies;
+        string a = "tie";
+
+        if(result <= 0)
+        {
+            a = "Lost";
+        }
+        else
+        {
+            a = "Win";
+        }
+
+        yield return new WaitForSeconds(2.5f);
+
+        _memoryManagement.SaveData("Point", 500 + _memoryManagement.ReadDataInt("Point"));
+        EndAnimations();
+        Debug.Log(a);
+
+    }
+
+    void EndAnimations()
+    {
+        SpawnManager.spawnManager.IsBattleStart = false;
+
+        foreach (var enemy in enemyPoolChars)
+        {
+            if (enemy.activeInHierarchy)
+            {
+                enemy.GetComponent<Animator>().SetBool("Attack", false);
+            }           
+        }
+
+        foreach (var subChar in poolChars)
+        {
+            if (subChar.activeInHierarchy)
+            {
+                subChar.GetComponent<Animator>().SetBool("Attack", false);
+            }
+        }
+
     }
 }

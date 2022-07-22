@@ -47,6 +47,13 @@ public class SubCharController : MonoBehaviour
             DestroyingSequence(gameObject);
             SpawnManager.spawnManager.HammerDestroyShow(other.gameObject.transform);
         }
+
+        if (other.CompareTag("Enemy"))
+        {
+            DestroyingSequence(gameObject);
+            other.gameObject.SetActive(false);
+            SpawnManager.spawnManager.NumberOfEnemies--;
+        }
     }
 
     public void DestroyingSequence(GameObject gameObject)

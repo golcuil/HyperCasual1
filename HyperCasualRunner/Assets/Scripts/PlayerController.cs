@@ -58,6 +58,12 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("BattleFieldEnter"))
         {      
             spawnManager.IsBattleStart = true;
+            UIManager.Instance.SliderOff = true;
+            StartCoroutine(spawnManager.EndOfGame());
+            GetComponent<Animator>().SetBool("Attack", false);
         }
     }
+
+
+    
 }

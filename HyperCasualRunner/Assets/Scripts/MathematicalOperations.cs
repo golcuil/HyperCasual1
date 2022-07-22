@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.Pool;
-using static UnityEditor.PlayerSettings;
+//using static UnityEditor.PlayerSettings;
 
-namespace Mathematical
+namespace GeneralLibrary
 {
-    public class MathematicalOperations : MonoBehaviour
+    public class MathematicalOperations 
     {
 
-        public static void Multiply(List<GameObject> poolChars, Transform objectPos, int value)
+        public void Multiply(List<GameObject> poolChars, Transform objectPos, int value)
         {
             int num1 = 0;
             int loopMultiply = SpawnManager.spawnManager.ActiveCharacters * (value - 1);
@@ -20,9 +20,10 @@ namespace Mathematical
                 {
                     if (!item.activeInHierarchy)
                     {
-                        item.transform.position = objectPos.position;
+                        item.transform.position = new Vector3(objectPos.position.x,objectPos.position.y,objectPos.position.z - 1f);
                         SpawnManager.spawnManager.SpawningParticles(item);
                         item.SetActive(true);
+                        item.GetComponent<AudioSource>().Play();
                         num1++;
 
                     }
@@ -37,7 +38,7 @@ namespace Mathematical
             SpawnManager.spawnManager.ActiveCharacters *= value;
         }
 
-        public static void Sum(List<GameObject> poolChars, Transform objectPos, int value)
+        public void Sum(List<GameObject> poolChars, Transform objectPos, int value)
         {
             int num2 = 0;
 
@@ -48,9 +49,10 @@ namespace Mathematical
                     if (!item.activeInHierarchy)
                     {
                         
-                        item.transform.position = objectPos.position;
+                        item.transform.position = new Vector3(objectPos.position.x, objectPos.position.y, objectPos.position.z - 1f); ;
                         SpawnManager.spawnManager.SpawningParticles(item);
                         item.SetActive(true);
+                        item.GetComponent<AudioSource>().Play();
                         num2++;
 
                     }
@@ -65,7 +67,7 @@ namespace Mathematical
             SpawnManager.spawnManager.ActiveCharacters += value;
         }
 
-        public static void Subtract(List<GameObject> poolChars, int value)
+        public void Subtract(List<GameObject> poolChars, int value)
         {
             if (SpawnManager.spawnManager.ActiveCharacters <= value)
             {
@@ -112,7 +114,7 @@ namespace Mathematical
             }
         }
 
-        public static void Divided(List<GameObject> poolChars, int value)
+        public void Divided(List<GameObject> poolChars, int value)
         {
             int divided = SpawnManager.spawnManager.ActiveCharacters / value;
 
@@ -171,6 +173,44 @@ namespace Mathematical
                 
             }
 
+        }
+
+    }
+
+    public class MemoryManagement
+    {
+        public void SaveData(string Key, string Value)
+        {
+            PlayerPrefs.SetString(Key, Value);
+            PlayerPrefs.Save();
+        }
+
+        public void SaveData(string Key, int Value)
+        {
+            PlayerPrefs.SetInt(Key, Value);
+            PlayerPrefs.Save();
+        }
+
+        public void SaveData(string Key, float Value)
+        {
+            PlayerPrefs.SetFloat(Key, Value);
+            PlayerPrefs.Save();
+        }
+
+
+        public string ReadDataStr(string Key)
+        {
+            return PlayerPrefs.GetString(Key);
+        }
+
+        public int ReadDataInt(string Key)
+        {
+            return PlayerPrefs.GetInt(Key);
+        }
+
+        public float ReadDataFloat(string Key)
+        {
+            return PlayerPrefs.GetFloat(Key);
         }
 
     }
